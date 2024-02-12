@@ -68,8 +68,6 @@
                      (tile (make-bitmap-tile png mask)))
                 (set! tiles (cons tile tiles))
                 (construct-tiles (cdr pairs)))))
-        (display "tiles: ")
-        (display tiles)
         (if (> (length tiles) 1)
             (let ((tile-sequence (make-tile-sequence tiles)))
               (save-and-add-to-layer object-adt tile-sequence)
@@ -80,8 +78,6 @@
 
     (define (get-object object-adt object-tiles pngs-masks-pairs)
       (let ((result (assoc object-adt object-tiles)))
-        (display "result: ")
-        (display result)
         (if result
             (cdr result)
             (add-object! object-adt pngs-masks-pairs))))
