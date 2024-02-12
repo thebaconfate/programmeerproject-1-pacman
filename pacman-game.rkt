@@ -3,6 +3,6 @@
 (#%require "game-adt.rkt")
 
 (define game (make-game-adt))
-((game 'start))
+(game 'start)
 
 
