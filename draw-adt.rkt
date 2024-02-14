@@ -28,7 +28,6 @@
         (vector-set! tiles 0 adt-and-sequence)))
 
     ;; draw-object! :: any tile -> /
-    ;; TODO refactor this properly
     (define (draw-object! object tile)
       (let* ((object-x (object 'get-x))
              (object-y (object 'get-y))
@@ -57,7 +56,6 @@
         ((pacman? adt)(set-pacman-tiles! (cons (cons adt tile-or-sequence) (pacman-tiles)))
                       (add-to-dynamic-layer tile-or-sequence))))
 
-    ;; TODO refactor this to a proper add-object function
     (define (add-object! object-adt png-mask-pairs)
       (let ((tiles '()))
         (let construct-tiles ((pairs png-mask-pairs))
