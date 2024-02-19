@@ -20,7 +20,7 @@
 
 (define coin-type 'coin)
 (define coin-score-value 1)
-(define coin-locations-level-1 '((10 10)(10 15)))
+(define coin-locations-level-1 (list (cons 10 10)(cons 10 15)))
 
 (define wall-type 'wall)
 (define wall-locations-level-1 '((1 1)(10 10)))

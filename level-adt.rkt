@@ -16,7 +16,9 @@
                    (y (cdr pospair))
                    (item (make-proc x y)))
               ((static-grid 'write-grid!) y x item)
-              (loop (cdr l))))))
+              (loop (cdr l)))))
+      (static-grid 'to-string))
+
 
     (define (draw-pacman! draw-adt)
       ((pacman 'draw!) draw-adt))
@@ -34,30 +36,30 @@
       (draw-pacman! draw-adt))
 
 
-  (define (direction? value)
-    (or (eq? value 'up)
-        (eq? value 'down)
-        (eq? value 'left)
-        (eq? value 'right)))
+    (define (direction? value)
+      (or (eq? value 'up)
+          (eq? value 'down)
+          (eq? value 'left)
+          (eq? value 'right)))
 
-  ;; key! :: any -> /
-  (define (key! key)
-    (cond
-      ((direction? key )(move-pacman! key))
-      (else (display key))))
-
-  (define (draw! draw-adt)
-    (draw-pacman! draw-adt))
-
-  (define (update! delta-time)
-    (display "updateing!"))
-
-  (define level-dispatch
-    (lambda (message)
+    ;; key! :: any -> /
+    (define (key! key)
       (cond
-        ((eq? message 'spawn-items!) spawn-items!)
-        ((eq? message 'update!) update!)
-        ((eq? message 'draw!) draw!)
-        ((eq? message 'draw-all!) draw-all!)
-        ((eq? message 'key!) key!))))
-  level-dispatch))
+        ((direction? key )(move-pacman! key))
+        (else (display key))))
+
+    (define (draw! draw-adt)
+      (draw-pacman! draw-adt))
+
+    (define (update! delta-time)
+      (display "updateing!"))
+
+    (define level-dispatch
+      (lambda (message)
+        (cond
+          ((eq? message 'spawn-items!) spawn-items!)
+          ((eq? message 'update!) update!)
+          ((eq? message 'draw!) draw!)
+          ((eq? message 'draw-all!) draw-all!)
+          ((eq? message 'key!) key!))))
+    level-dispatch))

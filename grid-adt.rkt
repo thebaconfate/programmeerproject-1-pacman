@@ -92,7 +92,7 @@
                                  (if (primitive? peek-value)
                                      (string-append (string-append (primitive->string peek-value) " ")
                                                     (loop (+ j 1)))
-                                     (string-append (string-append (string->char (peek-value 'to-string)) " ")
+                                     (string-append (string-append (string (string->char (peek-value 'to-string))) " ")
                                                     (loop (+ j 1)))))
                                "|\n"))))
         (string-append bound->string

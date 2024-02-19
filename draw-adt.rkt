@@ -17,16 +17,24 @@
 
     ;; tiles
     (define tiles (make-vector 6 '()))
-    (define pacman-tiles (lambda () (vector-ref tiles 0)))
-    (define ghost-tiles (lambda () (vector-ref tiles 1)))
-    (define coin-tiles (lambda () (vector-ref tiles 2)))
-    (define fruit-tiles (lambda () (vector-ref tiles 3)))
-    (define wall-tiles (lambda () (vector-ref tiles 4)))
-    (define powerup-tiles (lambda () (vector-ref tiles 5)))
 
-    (define set-pacman-tiles!
+    (define (make-get-tiles-proc index)
+      (lambda () (vector-ref tiles index)))
+
+    (define pacman-tiles (make-get-tiles-proc 0))
+    (define ghost-tiles (make-get-tiles-proc 1))
+    (define coin-tiles (make-get-tiles-proc 2))
+    (define fruit-tiles (make-get-tiles-proc 3))
+    (define wall-tiles (make-get-tiles-proc 4))
+    (define powerup-tiles (make-get-tiles-proc 5))
+
+
+    (define (make-set-tiles-proc! index)
       (lambda (adt-and-sequence)
-        (vector-set! tiles 0 adt-and-sequence)))
+        (vector-set! tiles index adt-and-sequence)))
+
+    (define set-pacman-tiles! (make-set-tiles-proc! 0))
+    (define set-coin-tiles! (make-set-tiles-proc! 2))
 
     ;; draw-object! :: any tile -> /
     (define (draw-object! object tile)
@@ -37,6 +45,10 @@
         ((tile 'set-x!) screen-x)
         ((tile 'set-y!) screen-y)))
 
+    (define (make-double-cons-tiles get-tiles-proc)
+      (lambda (adt tile-or-sequence)
+        (cons (cons adt tile-or-sequence) (get-tiles-proc))))
+
     (define (save-tiles! adt tile-or-sequence)
       (cond
         ((pacman? adt)(set-pacman-tiles! (cons (cons adt tile-or-sequence) (pacman-tiles))))))
@@ -44,7 +56,8 @@
 
     (define (add-to-layer adt tile-or-sequence)
       (cond
-        ((pacman? adt) (add-to-dynamic-layer tile-or-sequence))))
+        ((pacman? adt) (add-to-dynamic-layer tile-or-sequence))
+        ((coin? adt) (add-to-static-layer tile-or-sequence))))
 
     (define (add-to-static-layer tile-or-sequence)
       ((static-layer 'add-drawable) tile-or-sequence))
@@ -52,13 +65,17 @@
     (define (add-to-dynamic-layer tile-or-sequence)
       ((dynamic-layer 'add-drawable) tile-or-sequence))
 
-    (define (cons-pacman-tiles adt tile-or-sequence)
-      (cons (cons adt tile-or-sequence) (pacman-tiles)))
+    (define cons-pacman-tiles (make-double-cons-tiles pacman-tiles))
+    (define cons-coin-tiles (make-double-cons-tiles coin-tiles))
 
     (define (save-and-add-to-layer adt tile-or-sequence)
       (cond
-        ((pacman? adt)(set-pacman-tiles! (cons-pacman-tiles adt tile-or-sequence))
-                      (add-to-dynamic-layer tile-or-sequence))))
+        ((pacman? adt)
+         (set-pacman-tiles! (cons-pacman-tiles adt tile-or-sequence))
+         (add-to-dynamic-layer tile-or-sequence))
+        ((coin? adt)
+         (set-coin-tiles! (cons-coin-tiles adt tile-or-sequence))
+         (add-to-static-layer tile-or-sequence))))
 
     (define (add-object! object-adt png-mask-pairs)
       (let ((tiles '()))
@@ -75,7 +92,7 @@
               (save-and-add-to-layer object-adt tile-sequence)
               tile-sequence)
             (let ((tile (car tiles)))
-              (save-and-add-to-layer object-adt tiles)
+              (save-and-add-to-layer object-adt tile)
               tile))))
 
     (define (get-object object-adt object-tiles pngs-masks-pairs)
@@ -95,7 +112,10 @@
         (draw-object! pacman-adt tile-sequence)))
 
     (define (draw-coin! coin)
-      (let ((tile (get-object coin (coin-tiles) (list (cons "images/coin.png" "images/coin_mask.png")))))
+      (let ((tile (get-object coin
+                              (coin-tiles)
+                              (list
+                               (cons "images/coin.png" "images/coin_mask.png")))))
         (draw-object! coin tile)))
 
 
@@ -113,7 +133,8 @@
     (define draw-dispatch
       (lambda (message)
         (cond
-          ((eq? message 'set-key-procedure!)set-key-procedure!)
-          ((eq? message 'set-game-loop-procedure!)set-game-loop-procedure!)
-          ((eq? message 'draw-pacman!)draw-pacman!))))
+          ((eq? message 'set-key-procedure!) set-key-procedure!)
+          ((eq? message 'set-game-loop-procedure!) set-game-loop-procedure!)
+          ((eq? message 'draw-pacman!) draw-pacman!)
+          ((eq? message 'draw-edible!) draw-edible!))))
     draw-dispatch))
