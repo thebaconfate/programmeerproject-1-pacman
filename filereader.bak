@@ -1,0 +1,16 @@
+#lang r5rs
+
+(define (make-filereader-adt filename)
+  (let* ((port (open-input-file filename))
+         (content (read port)))
+    (close-input-port port)
+
+    (define get-coins-positions (assoc 'coins content))
+
+
+    (define filereader-dispatch
+      (lambda (message)
+        (cond
+          ((eq? message 'get-coins-positions) get-coins-positions)
+          ((eq? message 'content) content))))
+    filereader-dispatch))
