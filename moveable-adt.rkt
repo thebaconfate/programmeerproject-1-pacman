@@ -35,10 +35,10 @@
             (y (position 'get-y))
             (x (position 'get-x)))
         (cond
-          ((eq? up direction)(set-position-y! (+ y 1)))
+          ((eq? up direction)(set-position-y! (- y 1)))
           ((eq? right direction)(set-position-x! (+ x 1)))
           ((eq? left direction)(set-position-x! (- x 1)))
-          ((eq? down direction)(set-position-y! (- x 1))))))
+          ((eq? down direction)(set-position-y! (+ x 1))))))
 
     (define (move-with-direction! direction)
       (let ((y (position 'get-y))
@@ -46,10 +46,10 @@
         (begin
           (set-direction! direction)
           (cond
-            ((eq? up direction)(set-position-y! (+ y 1)))
+            ((eq? up direction)(set-position-y! (- y 1)))
             ((eq? right direction)(set-position-x! (+ x 1)))
             ((eq? left direction)(set-position-x! (- x 1)))
-            ((eq? down direction)(set-position-y! (- x 1)))))))
+            ((eq? down direction)(set-position-y! (+ y 1)))))))
 
     (define moveable-dispatch
       (lambda (message)
