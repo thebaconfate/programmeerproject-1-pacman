@@ -3,11 +3,6 @@
 (#%require "constants.rkt")
 (#%provide (all-defined))
 
-
-
-
-
-
 (define (pacman? adt)
   (equal? pacman-type (adt 'type)))
 

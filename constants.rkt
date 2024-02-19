@@ -55,6 +55,16 @@
                                      (cons 16 23)
                                      (cons 17 23)
                                      (cons 18 23)
+                                     (cons 19 23)
+                                     (cons 8 19)
+                                     (cons 8 20)
+                                     (cons 8 21)
+                                     (cons 8 22)
+                                     (cons 8 23)
+                                     (cons 19 19)
+                                     (cons 19 20)
+                                     (cons 19 21)
+                                     (cons 19 22)
                                      (cons 19 23)))
 
 
