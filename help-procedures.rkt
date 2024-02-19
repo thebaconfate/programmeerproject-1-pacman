@@ -1,15 +1,17 @@
 #lang r5rs
 
+(#%require "constants.rkt")
 (#%provide (all-defined))
 
+
+
+
+
+
 (define (pacman? adt)
-  (equal? 'pacman (adt 'type)))
+  (equal? pacman-type (adt 'type)))
 
-(define (ghost? adt)
-  (equal? 'ghost (adt 'type)))
 
-(define (fruit? adt)
-  (equal? 'fruit (adt 'type)))
-
-(define (abs x)
-  (if (< x 0) (- x) x))
+(define (edible? adt)
+  (let ((type (adt 'type)))
+    (or (equal? type coin-type))))

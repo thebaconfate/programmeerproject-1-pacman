@@ -16,12 +16,13 @@
     (define dynamic-layer (window 'make-layer))
 
     ;; tiles
-    (define tiles (make-vector 5 '()))
+    (define tiles (make-vector 6 '()))
     (define pacman-tiles (lambda () (vector-ref tiles 0)))
     (define ghost-tiles (lambda () (vector-ref tiles 1)))
-    (define fruit-tiles (lambda () (vector-ref tiles 2)))
-    (define wall-tiles (lambda () (vector-ref tiles 3)))
-    (define powerup-tiles (lambda () (vector-ref tiles 4)))
+    (define coin-tiles (lambda () (vector-ref tiles 2)))
+    (define fruit-tiles (lambda () (vector-ref tiles 3)))
+    (define wall-tiles (lambda () (vector-ref tiles 4)))
+    (define powerup-tiles (lambda () (vector-ref tiles 5)))
 
     (define set-pacman-tiles!
       (lambda (adt-and-sequence)
@@ -93,9 +94,15 @@
                                         (cons "images/pacman-2.png" "images/pacman-2_mask.png")))))
         (draw-object! pacman-adt tile-sequence)))
 
+    (define (draw-coin! coin)
+      (let ((tile (get-object coin (coin-tiles) (list (cons "images/coin.png" "images/coin_mask.png")))))
+        (draw-object! coin tile)))
 
 
-
+    (define (draw-edible! edible-adt)
+      (let ((edible-type (edible-adt 'type)))
+        (cond
+          ((eq? edible-type coin-type)(draw-coin! edible-adt)))))
 
     (define (set-key-procedure! proc)
       ((window 'set-key-callback!) proc))

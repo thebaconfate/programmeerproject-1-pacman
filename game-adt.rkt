@@ -1,6 +1,6 @@
 #lang r5rs
 
-(#%require "constants.rkt" "draw-adt.rkt" "level-adt.rkt")
+(#%require "constants.rkt" "draw-adt.rkt" "level-adt.rkt" "static-adt.rkt" "edible-adt.rkt")
 (#%provide make-game-adt)
 
 (define (make-game-adt)
@@ -25,8 +25,15 @@
 
 
     (define (start)
+      (define make-wall-adt
+        (lambda (x y)
+          (make-static-adt x y wall-type)))
+      (define make-coin-adt
+        (lambda (x y)
+          (make-edible-adt x y coin-score-value coin-type)))
       ((draw-adt 'set-game-loop-procedure!) game-loop-procedure)
       ((draw-adt 'set-key-procedure!) key-procedure)
+      ((level-adt 'spawn-items!) make-coin-adt coin-locations-level-1)
       ((level-adt 'draw-all!) draw-adt))
     ;; sets the callbacks through the draw-adt
 

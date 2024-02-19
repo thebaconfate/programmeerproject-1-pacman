@@ -18,8 +18,18 @@
 (define cel-height-px (/ window-height-px true-game-height))
 
 
+(define coin-type 'coin)
+(define coin-score-value 1)
+(define coin-locations-level-1 '((10 10)(10 15)))
+
+(define wall-type 'wall)
+(define wall-locations-level-1 '((1 1)(10 10)))
+
 ;; Directions
 (define up 'up)
 (define down 'down)
 (define left 'left)
 (define right 'right)
+
+
+(define pacman-type 'pacman)
