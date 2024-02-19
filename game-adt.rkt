@@ -21,7 +21,11 @@
     (define (game-loop-procedure delta-tijd)
       (cond
         ((zero? 10)(display "you won!"))
-        ((zero? 10)(display "you lost!"))))
+        ((zero? 10)(display "you lost!"))
+        (else
+         (begin
+           ((level-adt 'update!) delta-tijd)
+           ((draw-adt 'draw!) draw-adt)))))
 
 
     (define (start)

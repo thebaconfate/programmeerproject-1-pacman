@@ -10,7 +10,10 @@
     (define (draw-pacman! draw-adt)
       ((pacman 'draw!) draw-adt))
 
-    (define (draw! draw-adt)
+    (define (move-pacman! direction)
+      ((pacman 'move-with-direction!) direction))
+
+    (define (draw-all! draw-adt)
       (draw-pacman! draw-adt))
 
 
@@ -23,12 +26,20 @@
     ;; key! :: any -> /
     (define (key! key)
       (cond
-        ((direction? key )(display key))
+        ((direction? key )(move-pacman! key))
         (else (display key))))
+
+    (define (draw! draw-adt)
+      (draw-pacman! draw-adt))
+
+    (define (update! delta-time)
+      (display "updateing!"))
 
     (define level-dispatch
       (lambda (message)
         (cond
-          ((eq? message 'draw!) draw!)
+          ((eq? message 'update!)update!)
+          ((eq? message 'draw)draw!)
+          ((eq? message 'draw-all!) draw!)
           ((eq? message 'key!) key!))))
     level-dispatch))

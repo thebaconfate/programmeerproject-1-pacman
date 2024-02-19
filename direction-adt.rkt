@@ -2,9 +2,10 @@
 
 
 (#%require "constants.rkt")
+(#%provide make-direction-adt)
 
 (define (make-direction-adt)
-  (let ((directions (make-vector up right left down))
+  (let ((directions (vector up right left down))
         (direction 0))
 
     (define get-direction
@@ -35,10 +36,10 @@
     (define set-direction!
       (lambda (new-direction)
         (cond
-          ((eq? new-direction 'up)(set-and-get-direction! 0))
-          ((eq? new-direction 'right)(set-and-get-direction! 1))
-          ((eq? new-direction 'left)(set-and-get-direction! 2))
-          ((eq? new-direction 'down)(set-and-get-direction! 3)))))
+          ((eq? new-direction up)(set-and-get-direction! 0))
+          ((eq? new-direction right)(set-and-get-direction! 1))
+          ((eq? new-direction left)(set-and-get-direction! 2))
+          ((eq? new-direction down)(set-and-get-direction! 3)))))
 
     (define direction-dispatch
       (lambda (message)
