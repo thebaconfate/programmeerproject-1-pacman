@@ -16,3 +16,10 @@
 
 (define cel-width-px (/ window-width-px true-game-width))
 (define cel-height-px (/ window-height-px true-game-height))
+
+
+;; Directions
+(define up 'up)
+(define down 'down)
+(define left 'left)
+(define right 'right)

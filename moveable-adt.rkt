@@ -1,6 +1,6 @@
 #lang r5rs
 
-(#%require "position-adt.rkt")
+(#%require "position-adt.rkt" "direction-adt.rkt")
 (#%provide make-moveable-adt)
 
 (define (make-moveable-adt x y)
