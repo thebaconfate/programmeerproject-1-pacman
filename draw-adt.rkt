@@ -51,9 +51,12 @@
     (define (add-to-dynamic-layer tile-or-sequence)
       ((dynamic-layer 'add-drawable) tile-or-sequence))
 
+    (define (cons-pacman-tiles adt tile-or-sequence)
+      (cons (cons adt tile-or-sequence) (pacman-tiles)))
+
     (define (save-and-add-to-layer adt tile-or-sequence)
       (cond
-        ((pacman? adt)(set-pacman-tiles! (cons (cons adt tile-or-sequence) (pacman-tiles)))
+        ((pacman? adt)(set-pacman-tiles! (cons-pacman-tiles adt tile-or-sequence))
                       (add-to-dynamic-layer tile-or-sequence))))
 
     (define (add-object! object-adt png-mask-pairs)
@@ -95,10 +98,10 @@
 
 
     (define (set-key-procedure! proc)
-      ((window 'set-key-procedure!) proc))
+      ((window 'set-key-callback!) proc))
 
     (define (set-game-loop-procedure! proc)
-      ((window 'set-game-loop-procedure!) proc))
+      ((window 'set-update-callback!) proc))
 
     (define draw-dispatch
       (lambda (message)
