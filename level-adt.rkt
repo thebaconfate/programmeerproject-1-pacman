@@ -38,8 +38,8 @@
     (define level-dispatch
       (lambda (message)
         (cond
-          ((eq? message 'update!)update!)
-          ((eq? message 'draw)draw!)
-          ((eq? message 'draw-all!) draw!)
+          ((eq? message 'update!) update!)
+          ((eq? message 'draw!) draw!)
+          ((eq? message 'draw-all!) draw-all!)
           ((eq? message 'key!) key!))))
     level-dispatch))

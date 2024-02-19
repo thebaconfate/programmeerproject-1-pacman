@@ -19,19 +19,15 @@
           ((level-adt 'key!) key)))
 
     (define (game-loop-procedure delta-tijd)
-      (cond
-        ((zero? 10)(display "you won!"))
-        ((zero? 10)(display "you lost!"))
-        (else
-         (begin
-           ((level-adt 'update!) delta-tijd)
-           ((draw-adt 'draw!) draw-adt)))))
+      (begin
+        ((level-adt 'update!) delta-tijd)
+        ((level-adt 'draw!) draw-adt)))
 
 
     (define (start)
       ((draw-adt 'set-game-loop-procedure!) game-loop-procedure)
       ((draw-adt 'set-key-procedure!) key-procedure)
-      ((level-adt 'draw!) draw-adt))
+      ((level-adt 'draw-all!) draw-adt))
     ;; sets the callbacks through the draw-adt
 
     (define dispatch
