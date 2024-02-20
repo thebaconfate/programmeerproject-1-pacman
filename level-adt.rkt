@@ -13,7 +13,7 @@
         (if (not (null? l))
             (let* ((pospair (car l))
                    (x (car pospair))
-                   (y (cdr pospair))
+                   (y (cadr pospair))
                    (item (make-proc x y)))
               ((static-grid 'write-grid!) y x item)
               (loop (cdr l)))))
