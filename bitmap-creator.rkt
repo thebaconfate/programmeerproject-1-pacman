@@ -7,3 +7,5 @@
 (generate-mask "images/pacman-3.png" "white")
 
 (generate-mask "images/coin.png" "white")
+
+(generate-mask "images/wall-segment.png" "white")
