@@ -32,7 +32,7 @@
 
 
 (define wall-type 'wall)
-(define wall-locations-level-1 (level-1 'get-walls-positions))
+(define wall-locations-level-1 (level-1 'get-wall-positions))
 
 ;; Directions
 (define up 'up)

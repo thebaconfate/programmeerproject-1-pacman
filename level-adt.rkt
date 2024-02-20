@@ -27,12 +27,12 @@
       ((pacman 'move-with-direction!) direction))
 
     (define (draw-all! draw-adt)
-      (define item? (lambda (item) (procedure? item)))
-      (define draw-if-item
+      (define object? (lambda (item) (procedure? item)))
+      (define draw-if-object
         (lambda (item)
-          (if (item? item)
+          (if (object? item)
               ((item 'draw!) draw-adt))))
-      ((static-grid 'for-each-grid) draw-if-item)
+      ((static-grid 'for-each-grid) draw-if-object)
       (draw-pacman! draw-adt))
 
 
