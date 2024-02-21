@@ -10,8 +10,6 @@
 
     (define (spawn-items! make-proc list-of-locations)
       (let loop ((l list-of-locations))
-        (display (length l))
-        (display "\n")
         (if (not (null? l))
             (let* ((pospair (car l))
                    (x (car pospair))

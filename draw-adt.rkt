@@ -77,9 +77,7 @@
          (set-pacman-tiles! (cons-pacman-tiles adt tile-or-sequence))
          (add-to-dynamic-layer tile-or-sequence))
         ((wall? adt)
-         (display "called save-and-add-to-layer")
          (set-wall-tiles! (cons-wall-tiles adt tile-or-sequence))
-         (display tile-or-sequence)
          (add-to-static-layer tile-or-sequence))
         ((coin? adt)
          (set-coin-tiles! (cons-coin-tiles adt tile-or-sequence))
@@ -140,7 +138,6 @@
 
     (define (draw-static! static-adt)
       (let ((static-type (static-adt 'type)))
-        (display "passed draw-static!")
         (cond
           ((eq? static-type wall-type)(draw-wall! static-adt)))))
 
