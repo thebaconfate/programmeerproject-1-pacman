@@ -64,6 +64,11 @@
 
     (define to-string
       (lambda ()
+        (define cols
+          (let loop ((j 0))
+            (if (< j dim-j)
+                (string-append (number->string j) " " (loop (+ j 1)))
+                "\n")))
         (define bound->string
           (let loop ((counter 0)
                      (limit (+ dim-j 2)))
@@ -85,21 +90,21 @@
         (define (string->char string)
           (string-ref string 0))
         (define (line->string i)
-          (string-append "| "
-                         (let loop ((j 0))
-                           (if (< j dim-j)
-                               (let ((peek-value (read-grid i j)))
-                                 (if (primitive? peek-value)
-                                     (string-append (string-append (primitive->string peek-value) " ")
-                                                    (loop (+ j 1)))
-                                     (string-append (string-append (string (string->char (peek-value 'to-string))) " ")
-                                                    (loop (+ j 1)))))
-                               "|\n"))))
-        (string-append bound->string
-                       (let loop ((i 0))
-                         (if (< i dim-i)
-                             (string-append (line->string i)(loop (+ i 1)))
-                             bound->string)))))
+          (string-append (number->string i) (string-append "| "
+                                                           (let loop ((j 0))
+                                                             (if (< j dim-j)
+                                                                 (let ((peek-value (read-grid i j)))
+                                                                   (if (primitive? peek-value)
+                                                                       (string-append (string-append (primitive->string peek-value) " ")
+                                                                                      (loop (+ j 1)))
+                                                                       (string-append (string-append (string (string->char (peek-value 'to-string))) " ")
+                                                                                      (loop (+ j 1)))))
+                                                                 "|\n")))))
+        (string-append cols (string-append bound->string
+                                           (let loop ((i 0))
+                                             (if (< i dim-i)
+                                                 (string-append (line->string i)(loop (+ i 1)))
+                                                 bound->string))))))
 
     (define grid-dispatch
       (lambda (message)

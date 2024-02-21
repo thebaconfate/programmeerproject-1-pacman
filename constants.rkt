@@ -22,13 +22,22 @@
 (define level-2-file "level-2.txt")
 (define level-3-file "level-3.txt")
 
+(define (remove-dups l)
+  (let loop ((l l)
+             (acc '()))
+    (if (null? l)
+        acc
+        (if (member (car l) acc)
+            (loop (cdr l) acc)
+            (loop (cdr l) (cons (car l) acc))))))
+
 (define level-1 (make-filereader-adt "level-1.txt"))
 (define level-2 (make-filereader-adt "level-2.txt"))
 (define level-3 (make-filereader-adt "level-3.txt"))
 
 (define coin-type 'coin)
 (define coin-score-value 1)
-(define coin-locations-level-1 (level-1 'get-coins-positions))
+(define coin-locations-level-1 (remove-dups (level-1 'get-coins-positions)))
 
 
 (define wall-type 'wall)
