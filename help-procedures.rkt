@@ -12,3 +12,6 @@
 (define (edible? adt)
   (let ((type (adt 'type)))
     (or (equal? type coin-type))))
+
+(define (wall? adt)
+  (equal? wall-type (adt 'type)))

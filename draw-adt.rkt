@@ -35,6 +35,7 @@
 
     (define set-pacman-tiles! (make-set-tiles-proc! 0))
     (define set-coin-tiles! (make-set-tiles-proc! 2))
+    (define set-wall-tiles! (make-set-tiles-proc! 4))
 
     ;; draw-object! :: any tile -> /
     (define (draw-object! object tile)
@@ -67,12 +68,16 @@
 
     (define cons-pacman-tiles (make-double-cons-tiles pacman-tiles))
     (define cons-coin-tiles (make-double-cons-tiles coin-tiles))
+    (define cons-wall-tiles (make-double-cons-tiles wall-tiles))
 
     (define (save-and-add-to-layer adt tile-or-sequence)
       (cond
         ((pacman? adt)
          (set-pacman-tiles! (cons-pacman-tiles adt tile-or-sequence))
          (add-to-dynamic-layer tile-or-sequence))
+        ((wall? adt)
+         (set-wall-tiles! (cons-wall-tiles adt tile-or-sequence))
+         (add-to-static-layer tile-or-sequence))
         ((coin? adt)
          (set-coin-tiles! (cons-coin-tiles adt tile-or-sequence))
          (add-to-static-layer tile-or-sequence))))
@@ -101,23 +106,29 @@
             (cdr result)
             (add-object! object-adt pngs-masks-pairs))))
 
-    (define (draw-pacman! pacman-adt)
-      (let ((tile-sequence (get-object pacman-adt
-                                       (pacman-tiles)
-                                       (list
-                                        (cons "images/pacman-3.png" "images/pacman-3_mask.png")
-                                        (cons "images/pacman-2.png" "images/pacman-2_mask.png")
-                                        (cons "images/pacman-1.png" "images/pacman-1_mask.png")
-                                        (cons "images/pacman-2.png" "images/pacman-2_mask.png")))))
-        (draw-object! pacman-adt tile-sequence)))
 
-    (define (draw-coin! coin)
-      (let ((tile (get-object coin
-                              (coin-tiles)
-                              (list
-                               (cons "images/coin.png" "images/coin_mask.png")))))
-        (draw-object! coin tile)))
+    (define (make-draw-function get-tiles-proc list-of-pngs-masks-pairs)
+      (lambda (adt)
+        (let ((tile-sequence (get-object adt (get-tiles-proc) list-of-pngs-masks-pairs)))
+          (draw-object! adt tile-sequence))))
 
+    (define draw-pacman!
+      (make-draw-function pacman-tiles
+                          (list
+                           (cons "images/pacman-3.png" "images/pacman-3_mask.png")
+                           (cons "images/pacman-2.png" "images/pacman-2_mask.png")
+                           (cons "images/pacman-1.png" "images/pacman-1_mask.png")
+                           (cons "images/pacman-2.png" "images/pacman-2_mask.png"))))
+
+    (define draw-coin!
+      (make-draw-function coin-tiles
+                          (list
+                           (cons "images/coin.png" "images/coin_mask.png"))))
+
+    (define draw-wall!
+      (make-draw-function wall-tiles
+                          (list
+                           (cons "images/wall-segment.png" "images/wall-segment_mask"))))
 
     (define (draw-edible! edible-adt)
       (let ((edible-type (edible-adt 'type)))
