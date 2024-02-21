@@ -19,6 +19,5 @@
         (cond
           ((eq? message 'draw!) draw!)
           ((eq? message 'points) points)
-          ((eq? message 'to-string)(to-string))
           (else (static-adt message)))))
     edible-dispatch))

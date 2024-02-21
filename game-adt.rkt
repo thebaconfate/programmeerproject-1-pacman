@@ -34,6 +34,7 @@
       ((draw-adt 'set-game-loop-procedure!) game-loop-procedure)
       ((draw-adt 'set-key-procedure!) key-procedure)
       ((level-adt 'spawn-items!) make-coin-adt coin-locations-level-1)
+      ((level-adt 'spawn-items!) make-wall-adt wall-locations-level-1)
       ((level-adt 'draw-all!) draw-adt))
     ;; sets the callbacks through the draw-adt
 

@@ -29,13 +29,13 @@
     (define powerup-tiles (make-get-tiles-proc 5))
 
 
-    (define (make-set-tiles-proc! index)
+    (define (make-set-tiles-proc index)
       (lambda (adt-and-sequence)
         (vector-set! tiles index adt-and-sequence)))
 
-    (define set-pacman-tiles! (make-set-tiles-proc! 0))
-    (define set-coin-tiles! (make-set-tiles-proc! 2))
-    (define set-wall-tiles! (make-set-tiles-proc! 4))
+    (define set-pacman-tiles! (make-set-tiles-proc 0))
+    (define set-coin-tiles! (make-set-tiles-proc 2))
+    (define set-wall-tiles! (make-set-tiles-proc 4))
 
     ;; draw-object! :: any tile -> /
     (define (draw-object! object tile)
@@ -58,6 +58,7 @@
     (define (add-to-layer adt tile-or-sequence)
       (cond
         ((pacman? adt) (add-to-dynamic-layer tile-or-sequence))
+        ((wall? adt) (add-to-static-layer tile-or-sequence))
         ((coin? adt) (add-to-static-layer tile-or-sequence))))
 
     (define (add-to-static-layer tile-or-sequence)
@@ -76,7 +77,9 @@
          (set-pacman-tiles! (cons-pacman-tiles adt tile-or-sequence))
          (add-to-dynamic-layer tile-or-sequence))
         ((wall? adt)
+         (display "called save-and-add-to-layer")
          (set-wall-tiles! (cons-wall-tiles adt tile-or-sequence))
+         (display tile-or-sequence)
          (add-to-static-layer tile-or-sequence))
         ((coin? adt)
          (set-coin-tiles! (cons-coin-tiles adt tile-or-sequence))
@@ -128,12 +131,18 @@
     (define draw-wall!
       (make-draw-function wall-tiles
                           (list
-                           (cons "images/wall-segment.png" "images/wall-segment_mask"))))
+                           (cons "images/wall-segment.png" "images/wall-segment_mask.png"))))
 
     (define (draw-edible! edible-adt)
       (let ((edible-type (edible-adt 'type)))
         (cond
           ((eq? edible-type coin-type)(draw-coin! edible-adt)))))
+
+    (define (draw-static! static-adt)
+      (let ((static-type (static-adt 'type)))
+        (display "passed draw-static!")
+        (cond
+          ((eq? static-type wall-type)(draw-wall! static-adt)))))
 
     (define (set-key-procedure! proc)
       ((window 'set-key-callback!) proc))
@@ -147,5 +156,6 @@
           ((eq? message 'set-key-procedure!) set-key-procedure!)
           ((eq? message 'set-game-loop-procedure!) set-game-loop-procedure!)
           ((eq? message 'draw-pacman!) draw-pacman!)
+          ((eq? message 'draw-static!) draw-static!)
           ((eq? message 'draw-edible!) draw-edible!))))
     draw-dispatch))

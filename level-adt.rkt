@@ -17,17 +17,8 @@
                    (x (car pospair))
                    (y (cadr pospair))
                    (item (make-proc x y)))
-              (display (string-append "x: " (number->string x) " y: " (number->string y) "\n"))
               ((static-grid 'write-grid!) y x item)
-              (display ((static-grid 'read-grid) y x))
-              (loop (cdr l)))))
-      (define counter 0)
-      ((static-grid 'for-each-grid) (lambda (item) (if (procedure? item)(set! counter (+ counter 1)))))
-      (display "counter: ")
-      (display counter)
-      (display "\n")
-      (display (static-grid 'to-string)))
-
+              (loop (cdr l))))))
 
     (define (draw-pacman! draw-adt)
       ((pacman 'draw!) draw-adt))

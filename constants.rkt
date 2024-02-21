@@ -37,7 +37,7 @@
 
 (define coin-type 'coin)
 (define coin-score-value 1)
-(define coin-locations-level-1 (remove-dups (level-1 'get-coins-positions)))
+(define coin-locations-level-1 (level-1 'get-coins-positions))
 
 
 (define wall-type 'wall)
