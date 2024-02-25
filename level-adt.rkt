@@ -5,7 +5,7 @@
 
 (define (make-level-adt width height level)
   (let* ((static-grid (make-grid-adt height width))
-         (pacman (make-pacman-adt 5 5)))
+         (pacman (make-pacman-adt (car pacman-location)(cadr pacman-location))))
 
 
     (define (spawn-items! make-proc list-of-locations)
@@ -50,7 +50,7 @@
       (draw-pacman! draw-adt))
 
     (define (update! delta-time)
-      (display "updateing!"))
+      "dummy update function")
 
     (define level-dispatch
       (lambda (message)

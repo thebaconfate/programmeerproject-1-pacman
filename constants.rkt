@@ -1,6 +1,6 @@
 #lang r5rs
 
-(#%require "filereader.rkt")
+(#%require "filereader-adt.rkt")
 (#%provide (all-defined))
 
 (define game-width 27)
@@ -31,9 +31,13 @@
             (loop (cdr l) acc)
             (loop (cdr l) (cons (car l) acc))))))
 
-(define level-1 (make-filereader-adt "level-1.txt"))
-(define level-2 (make-filereader-adt "level-2.txt"))
-(define level-3 (make-filereader-adt "level-3.txt"))
+(define level-1 (make-filereader-adt level-1-file))
+(define level-2 (make-filereader-adt level-2-file))
+(define level-3 (make-filereader-adt level-3-file))
+
+#| car because the location is in a list|#
+(define pacman-location (car (level-1 'get-pacman-position)))
+
 
 (define coin-type 'coin)
 (define coin-score-value 1)
