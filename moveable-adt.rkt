@@ -30,26 +30,52 @@
       (set! position (make-position-adt x y))
       (set! direction (make-direction-adt)))
 
+    (define (invoke-proc-with-direction direction proc-up proc-down proc-right proc-left)
+      (cond
+        ((eq? direction up)(proc-up))
+        ((eq? direction down)(proc-down))
+        ((eq? direction right)(proc-right))
+        ((eq? direction left)(proc-left))))
+
+    (define position-up
+      (lambda ()
+        (let ((x (position 'get-x))
+              (y (position 'get-y)))
+          (make-position-adt x (- y 1)))))
+
+    (define position-down
+      (lambda ()
+        (let ((x (position 'get-x))
+              (y (position 'get-y)))
+          (make-position-adt x (+ y 1)))))
+
+    (define position-right
+      (lambda ()
+        (let ((x (position 'get-x))
+              (y (position 'get-y)))
+          (make-position-adt (+ x 1) y))))
+
+    (define position-left
+      (lambda ()
+        (let ((x (position 'get-x))
+              (y (position 'get-y)))
+          (make-position-adt (- x 1) y))))
+
+    (define (next-position direction)
+      (invoke-proc-with-direction direction
+                                  position-up
+                                  position-down
+                                  position-right
+                                  position-left))
+
     (define (move!)
-      (let ((direction (get-direction))
-            (y (position 'get-y))
-            (x (position 'get-x)))
-        (cond
-          ((eq? up direction)(set-position-y! (- y 1)))
-          ((eq? right direction)(set-position-x! (+ x 1)))
-          ((eq? left direction)(set-position-x! (- x 1)))
-          ((eq? down direction)(set-position-y! (+ x 1))))))
+      (let* ((direction (get-direction))
+             (next-position (next-position direction)))
+        (set! position next-position)))
 
     (define (move-with-direction! direction)
-      (let ((y (position 'get-y))
-            (x (position 'get-x)))
-        (begin
-          (set-direction! direction)
-          (cond
-            ((eq? up direction)(set-position-y! (- y 1)))
-            ((eq? right direction)(set-position-x! (+ x 1)))
-            ((eq? left direction)(set-position-x! (- x 1)))
-            ((eq? down direction)(set-position-y! (+ y 1)))))))
+      (let ((next-position (next-position direction)))
+        (set! position next-position)))
 
     (define moveable-dispatch
       (lambda (message)
