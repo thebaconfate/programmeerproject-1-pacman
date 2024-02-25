@@ -7,18 +7,8 @@
   (let ((position (make-position-adt x y))
         (direction (make-direction-adt)))
 
-    (define (set-position-x! new-x)
-      (let ((y (position 'get-y)))
-        (set! position (make-position-adt new-x y))))
-
-    (define (set-position-y! new-y)
-      (let ((x (position 'get-x)))
-        (set! position (make-position-adt x new-y))))
-
-    (define (set-position! new-x new-y)
-      (set! position (make-position-adt x y)))
-
-    (define moveable? #t)
+    (define (set-position! new-position)
+      (set! position new-position))
 
     (define (get-direction)
       (direction 'get-direction))
@@ -77,13 +67,19 @@
       (let ((next-position (next-position direction)))
         (set! position next-position)))
 
+    (define (teleport! x)
+      (set! position (make-position-adt x (position 'get-y))))
+
     (define moveable-dispatch
       (lambda (message)
         (cond
           ((eq? message 'get-direction)(get-direction))
           ((eq? message 'set-direction!)set-direction!)
           ((eq? message 'reset-position!)(reset-position!))
+          ((eq? message 'set-position!)set-position!)
           ((eq? message 'move!)(move!))
+          ((eq? message 'next-position) next-position)
+          ((eq? message 'teleport!) teleport!)
           ((eq? message 'move-with-direction!) move-with-direction!)
           (else (position message)))))
     moveable-dispatch))

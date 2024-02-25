@@ -17,7 +17,7 @@
     (define static-dispatch
       (lambda (message)
         (cond
-          ((eq? message 'type) type)
+          ((eq? message 'get-type) type)
           ((eq? message 'draw!) draw!)
           ((eq? message 'to-string)(to-string))
           (else (position message)))))

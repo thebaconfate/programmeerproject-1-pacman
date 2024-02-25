@@ -12,20 +12,23 @@
 (#%provide make-position-adt)
 
 (define (make-position-adt x y)
-  
+
   (define (get-x) x)
-  
+
   (define (get-y) y)
 
   (define (=position other-position)
     (and (= (get-x)(other-position 'get-x))
          (= (get-y)(other-position 'get-y))))
-  
+
   (define position-dispatch
     (lambda(message)
       (cond
         ((eq? message 'get-x)(get-x))
         ((eq? message 'get-y)(get-y))
         ((eq? message '=position)=position)
-        (else "ERROR - Method not recognized by POSITION ADT "))))
+        (else (string-append "ERROR - Method "
+                             (string-append
+                              (symbol->string message)
+                              "not recognized by POSITION ADT "))))))
   position-dispatch)

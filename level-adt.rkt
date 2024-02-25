@@ -1,12 +1,17 @@
 #lang r5rs
 
-(#%require "constants.rkt" "grid-adt.rkt" "pacman-adt.rkt")
+(#%require "constants.rkt" "grid-adt.rkt" "pacman-adt.rkt" "help-procedures.rkt")
 (#%provide make-level-adt)
 
 (define (make-level-adt width height level)
   (let* ((static-grid (make-grid-adt height width))
          (pacman (make-pacman-adt (car pacman-location)(cadr pacman-location))))
 
+    (define (write-grid! x y value)
+      ((static-grid 'write-grid!) y x value))
+
+    (define (read-grid x y)
+      ((static-grid 'read-grid) y x))
 
     (define (spawn-items! make-proc list-of-locations)
       (let loop ((l list-of-locations))
@@ -15,14 +20,22 @@
                    (x (car pospair))
                    (y (cadr pospair))
                    (item (make-proc x y)))
-              ((static-grid 'write-grid!) y x item)
+              (write-grid! x y item)
               (loop (cdr l))))))
 
     (define (draw-pacman! draw-adt)
       ((pacman 'draw!) draw-adt))
 
     (define (move-pacman! direction)
-      ((pacman 'move-with-direction!) direction))
+      ((pacman 'set-direction!) direction)
+      (let ((nex-pos ((pacman 'next-position) direction)))
+        (cond
+          ((< (nex-pos 'get-x)(* width 0))((pacman 'teleport!) width))
+          ((> (nex-pos 'get-x)(- width 1))((pacman 'teleport!) 0))
+          (else
+           (let ((item (read-grid (nex-pos 'get-x) (nex-pos 'get-y))))
+             (if (not (wall? item))
+                 ((pacman 'set-position!) nex-pos)))))))
 
     (define (draw-all! draw-adt)
       (define object? (lambda (item) (procedure? item)))

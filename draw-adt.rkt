@@ -132,12 +132,12 @@
                            (cons "images/wall-segment.png" "images/wall-segment_mask.png"))))
 
     (define (draw-edible! edible-adt)
-      (let ((edible-type (edible-adt 'type)))
+      (let ((edible-type (edible-adt 'get-type)))
         (cond
           ((eq? edible-type coin-type)(draw-coin! edible-adt)))))
 
     (define (draw-static! static-adt)
-      (let ((static-type (static-adt 'type)))
+      (let ((static-type (static-adt 'get-type)))
         (cond
           ((eq? static-type wall-type)(draw-wall! static-adt)))))
 

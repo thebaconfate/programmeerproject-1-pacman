@@ -16,6 +16,6 @@
       (lambda (message)
         (cond
           ((eq? message 'draw!)draw!)
-          ((eq? message 'type) type)
+          ((eq? message 'get-type) type)
           (else (moveable message)))))
     pacman-dispatch))

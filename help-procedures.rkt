@@ -3,18 +3,21 @@
 (#%require "constants.rkt")
 (#%provide (all-defined))
 
+(define (adt-type adt)
+  (adt 'get-type))
+
 (define (pacman? adt)
-  (equal? pacman-type (adt 'type)))
+  (equal? pacman-type (adt 'get-type)))
 
 (define (coin? adt)
-  (equal? coin-type (adt 'type)))
+  (equal? coin-type (adt 'get-type)))
 
 (define (edible? adt)
-  (let ((type (adt 'type)))
+  (let ((type (adt 'get-type)))
     (or (equal? type coin-type))))
 
 (define (wall? adt)
-  (equal? wall-type (adt 'type)))
+  (and (procedure? adt)(equal? wall-type (adt 'get-type))))
 
 (define level-1-coin-list-of-row-y   '(19 21 23))
 (define level-1-coin-list-of-start-x '( 8  8  8))
