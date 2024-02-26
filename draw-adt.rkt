@@ -113,6 +113,13 @@
         (let ((tile-sequence (get-object adt (get-tiles-proc) list-of-pngs-masks-pairs)))
           (draw-object! adt tile-sequence))))
 
+    (define (make-static-dedraw-function get-tiles-proc set-tiles-proc!)
+      (lambda (adt)
+        (let* ((result (assoc adt (get-tiles-proc)))
+               (tile-or-sequence (cdr result)))
+          ((static-layer 'remove-drawable) tile-or-sequence)
+          (set-tiles-proc! (remove adt (get-tiles-proc))))))
+
     (define draw-pacman!
       (make-draw-function pacman-tiles
                           (list
@@ -126,15 +133,22 @@
                           (list
                            (cons "images/coin.png" "images/coin_mask.png"))))
 
+    (define remove-coin!
+      (make-static-dedraw-function coin-tiles
+                                   set-coin-tiles!))
+
     (define draw-wall!
       (make-draw-function wall-tiles
                           (list
                            (cons "images/wall-segment.png" "images/wall-segment_mask.png"))))
 
     (define (draw-edible! edible-adt)
-      (let ((edible-type (edible-adt 'get-type)))
-        (cond
-          ((eq? edible-type coin-type)(draw-coin! edible-adt)))))
+      (cond
+        ((coin? edible-adt)(draw-coin! edible-adt))))
+
+    (define (remove-edible! edible-adt)
+      (cond
+        ((coin? edible-adt)(remove-coin! edible-adt))))
 
     (define (draw-static! static-adt)
       (let ((static-type (static-adt 'get-type)))
@@ -154,5 +168,6 @@
           ((eq? message 'set-game-loop-procedure!) set-game-loop-procedure!)
           ((eq? message 'draw-pacman!) draw-pacman!)
           ((eq? message 'draw-static!) draw-static!)
-          ((eq? message 'draw-edible!) draw-edible!))))
+          ((eq? message 'draw-edible!) draw-edible!)
+          ((eq? message 'remove-edible!) remove-edible!))))
     draw-dispatch))

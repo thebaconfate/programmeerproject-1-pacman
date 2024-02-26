@@ -90,16 +90,23 @@
         (define (string->char string)
           (string-ref string 0))
         (define (line->string i)
-          (string-append (number->string i) (string-append "| "
-                                                           (let loop ((j 0))
-                                                             (if (< j dim-j)
-                                                                 (let ((peek-value (read-grid i j)))
-                                                                   (if (primitive? peek-value)
-                                                                       (string-append (string-append (primitive->string peek-value) " ")
-                                                                                      (loop (+ j 1)))
-                                                                       (string-append (string-append (string (string->char (peek-value 'to-string))) " ")
-                                                                                      (loop (+ j 1)))))
-                                                                 "|\n")))))
+          (string-append (number->string i)
+                         (string-append
+                          "| "
+                          (let loop ((j 0))
+                            (if (< j dim-j)
+                                (let ((peek-value (read-grid i j)))
+                                  (if (primitive? peek-value)
+                                      (string-append
+                                       (string-append
+                                        (primitive->string peek-value) " ")
+                                       (loop (+ j 1)))
+                                      (string-append
+                                       (string-append
+                                        (string (string->char
+                                                 (peek-value 'to-string))) " ")
+                                       (loop (+ j 1)))))
+                                "|\n")))))
         (string-append cols (string-append bound->string
                                            (let loop ((i 0))
                                              (if (< i dim-i)

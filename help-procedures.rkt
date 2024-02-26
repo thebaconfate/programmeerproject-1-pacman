@@ -13,8 +13,8 @@
   (equal? coin-type (adt 'get-type)))
 
 (define (edible? adt)
-  (let ((type (adt 'get-type)))
-    (or (equal? type coin-type))))
+  (and (procedure? adt)
+       (or (equal? coin-type (adt-type adt)))))
 
 (define (wall? adt)
   (and (procedure? adt)(equal? wall-type (adt 'get-type))))
@@ -43,3 +43,16 @@
                                       (create-list-of-positions 8 19 19 23)
                                       (create-list-of-positions 8 8 19 23)
                                       (create-list-of-positions 19 19 19 23))))
+(define (string-join list-of-strings char)
+  (let loop ((result "")
+             (list-of-strings list-of-strings))
+    (if (null? list-of-strings)
+        result
+        (loop (string-append result (car list-of-strings) char) (cdr list-of-strings)))))
+
+(define (remove item lst)
+  (if (null? lst)
+      '()
+      (if (equal? item (car lst))
+          (cdr lst)
+          (cons (car lst) (remove item (cdr lst))))))

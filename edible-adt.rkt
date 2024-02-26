@@ -11,6 +11,10 @@
       (lambda (draw-adt)
         ((draw-adt 'draw-edible!) edible-dispatch)))
 
+    (define remove!
+      (lambda (remove-adt)
+        ((remove-adt 'remove-edible!) edible-dispatch)))
+
     (define (to-string)
       (symbol->string type))
 
@@ -18,6 +22,7 @@
       (lambda (message)
         (cond
           ((eq? message 'draw!) draw!)
+          ((eq? message 'remove!) remove!)
           ((eq? message 'points) points)
           (else (static-adt message)))))
     edible-dispatch))
