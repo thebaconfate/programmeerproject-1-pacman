@@ -22,7 +22,6 @@
 (define wall-type 'wall)
 (define fruit-type '())
 
-
 (define coin-score-value 10)
 
 (define coins-positions-per-level '((1 . ((1 . 1)

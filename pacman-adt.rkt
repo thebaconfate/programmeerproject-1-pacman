@@ -1,11 +1,13 @@
 #lang r5rs
 
-(#%require "moveable-adt.rkt")
+(#%require
+ "constants.rkt"
+ "moveable-adt.rkt" )
 (#%provide make-pacman-adt)
 
 
 (define (make-pacman-adt x y)
-  (let ((moveable (make-moveable-adt x y 'pacman))
+  (let ((moveable (make-moveable-adt x y pacman-type))
         (rotations '(0 . #f)))
 
     (define enumerated-directions '((left . 0)(up . 1)(right . 2)(down . 3)))

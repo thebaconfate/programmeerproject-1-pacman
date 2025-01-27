@@ -14,18 +14,24 @@
     (define dynamic-layer (window 'make-layer))
 
     ;; tiles
-    (define tiles (make-vector 5 '()))
+    (define tiles (make-vector 6 '()))
+
     (define pacman-tiles (lambda () (vector-ref tiles 0)))
+    (define set-pacman-tiles! (lambda (adt-and-sequence) (vector-set! tiles 0 adt-and-sequence)))
     (define pacman-sprites '(("images/pacman-3.png" . "images/pacman-3_mask.png")
                              ("images/pacman-2.png" . "images/pacman-2_mask.png")
                              ("images/pacman-1.png" . "images/pacman-1_mask.png")
                              ("images/pacman-2.png" . "images/pacman-2_mask.png")))
-    (define ghost-tiles (lambda () (vector-ref tiles 1)))
-    (define fruit-tiles (lambda () (vector-ref tiles 2)))
-    (define wall-tiles (lambda () (vector-ref tiles 3)))
-    (define powerup-tiles (lambda () (vector-ref tiles 4)))
 
-    (define set-pacman-tiles! (lambda (adt-and-sequence) (vector-set! tiles 0 adt-and-sequence)))
+    (define coin-tiles (lambda ()(vector-ref tiles 1)))
+    (define set-coin-tiles! (lambda (adt-and-sequence)(vector-set! tiles 1 adt-and-sequence)))
+    (define coin-sprites '(("images/coin.png" . "images/coin-mask.png")))
+
+    (define ghost-tiles (lambda () (vector-ref tiles 2)))
+    (define fruit-tiles (lambda () (vector-ref tiles 3)))
+    (define wall-tiles (lambda () (vector-ref tiles 4)))
+    (define powerup-tiles (lambda () (vector-ref tiles 5)))
+
 
     ;; draw-object! :: any tile -> /
     ;; TODO refactor this properly
@@ -46,6 +52,9 @@
     (define (save-and-add-to-layer adt tile-sequence)
       (define (create-new-tiles old-value) (cons (cons adt tile-sequence) old-value))
       (case (adt 'get-type)
+        ((coin)
+         (set-coin-tiles! (create-new-tiles (coin-tiles)))
+         (add-to-static-layer tile-sequence))
         ((pacman)
          (set-pacman-tiles! (create-new-tiles (pacman-tiles)))
          (add-to-dynamic-layer tile-sequence))))
@@ -74,7 +83,9 @@
 
     (define (get-tiles-storage-and-sprites adt)
       (case (adt 'get-type)
-        ((pacman)(cons (pacman-tiles) pacman-sprites))))
+        ((coin)(cons (coin-tiles) coin-sprites))
+        ((pacman)(cons (pacman-tiles) pacman-sprites))
+        (else (display "ADT NOT HANDLED IN get-tiles-storage-and-sprites function DRAW-ADT"))))
 
     (define (draw! adt)
       (let* ((adt-drawables (get-tiles-storage-and-sprites adt))
@@ -82,7 +93,11 @@
              (sprites (cdr adt-drawables))
              (tile-sequence (get-object adt tiles-storage sprites)))
         (draw-object! adt tile-sequence)
-        (tile-sequence 'set-next!)))
+        (display "object drawn ")
+        (display (adt 'get-type))
+        (newline)
+        ;;(tile-sequence 'set-next!)
+        ))
 
 
     (define (rotate-tile adt counter tile direction)

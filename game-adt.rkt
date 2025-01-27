@@ -27,16 +27,17 @@
         (set! time (+ time delta-time))
         (if (> time game-speed)
             (begin
-              (set! able-to-move #t)
               ;;((level-adt 'update!) draw-adt)
-              ;;((level-adt 'draw!) draw-adt)
+              ((level-adt 'draw!) draw-adt)
               ((pacman 'draw!) draw-adt)
               (set! time 0)
+              (set! able-to-move #t)
               ))))
 
     (define (start)
       ((draw-adt 'set-game-loop-procedure!) game-loop-procedure)
       ((draw-adt 'set-key-procedure!) key-procedure))
+
 
     (define dispatch
       (lambda (message)

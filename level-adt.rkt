@@ -7,7 +7,7 @@
   (let* ((grid (make-grid-adt height width))
          (redraw-positions '()))
 
-    (define (init-level level)
+    (define (init-level)
       (define (get-level-positions level-and-positions-list)
         (if (or (null? (cdr level-and-positions-list))
                 (= (caar level-and-positions-list) level))
@@ -18,15 +18,25 @@
                     (let* ((x (car position))
                            (y (cdr position))
                            (edible (make-edible-adt x y coin-type coin-score-value)))
-                      ((grid 'write-grid!) x y edible))) coin-positions)
+                      ((grid 'write-grid!) x y edible)))
+                  coin-positions)
         (set! redraw-positions (cons coin-positions redraw-positions))))
 
-    ;;(display ((grid 'to-string)))
-    (init-level level)
-    (display ((grid 'to-string)))
+    (define (draw! draw-adt)
+      (if (not (null? redraw-positions))
+          (begin
+            (for-each (lambda (position)
+                        (let* ((x (caar position))
+                               (y (cdar position)))
+                          ((((grid 'read-grid) x y) 'draw!) draw-adt)))
+                      redraw-positions)
+            ;;(set! redraw-positions '())
+            )))
 
+    (init-level)
     (define level-dispatch
       (lambda (message)
         (cond
+          ((eq? message 'draw!) draw!)
           (else (display-invalid-message message "LEVEL-ADT")))))
     level-dispatch))
