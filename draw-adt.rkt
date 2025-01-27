@@ -84,16 +84,36 @@
         (draw-object! adt tile-sequence)
         (tile-sequence 'set-next!)))
 
+
+    (define (rotate-tile adt counter tile direction)
+      (if (> counter 0)
+          (begin
+            (tile direction)
+            (rotate-tile adt (- counter 1) tile direction))
+          ((adt 'reset-rotation!))))
+
+    (define (draw-pacman! adt)
+      (let* ((adt-drawables (get-tiles-storage-and-sprites adt))
+             (tiles-storage (car adt-drawables))
+             (sprites (cdr adt-drawables))
+             (tile-sequence (get-object adt tiles-storage sprites))
+             (rotations (adt 'get-rotation)))
+        (if (cdr rotations)
+            (rotate-tile adt (car rotations) tile-sequence (cdr rotations)))
+        (draw-object! adt tile-sequence)
+        (tile-sequence 'set-next!)))
+
     (define (set-key-procedure! proc)
-      ((window 'set-key-procedure!) proc))
+      ((window 'set-key-callback!) proc))
 
     (define (set-game-loop-procedure! proc)
-      ((window 'set-game-loop-procedure!) proc))
+      ((window 'set-update-callback!) proc))
 
     (define draw-dispatch
       (lambda (message)
         (cond
+          ((eq? message 'draw!) draw!)
+          ((eq? message 'draw-pacman!) draw-pacman!)
           ((eq? message 'set-key-procedure!) set-key-procedure!)
-          ((eq? message 'set-game-loop-procedure!) set-game-loop-procedure!)
-          ((eq? message 'draw!) draw!))))
+          ((eq? message 'set-game-loop-procedure!) set-game-loop-procedure!))))
     draw-dispatch))

@@ -1,15 +1,35 @@
 #lang r5rs
 
-(#%require "constants.rkt" "help-procedures.rkt" "draw-adt.rkt" "level-adt.rkt")
+(#%require "constants.rkt" "help-procedures.rkt" "pacman-adt.rkt" "draw-adt.rkt" "level-adt.rkt")
 (#%provide make-game-adt)
 
 (define (make-game-adt)
   (let* ((level 1)
+         (pacman (make-pacman-adt 5 5))
          (level-adt (make-level-adt true-game-width true-game-height level))
-         (draw-adt (make-draw-adt window-width-px window-height-px)))
+         (draw-adt (make-draw-adt window-width-px window-height-px))
+         (time 0))
+
+    (define (key-procedure status key)
+      (begin
+        (if (eq? 'pressed status)
+            (begin
+              ((pacman 'set-direction!) key)
+              ((pacman 'move!))))))
+
+    (define (game-loop-procedure delta-time)
+      (begin
+        (set! time (+ time delta-time))
+        (if (> time 200)
+            (begin
+              ((pacman 'draw!) draw-adt)
+              ;;   ((level-adt 'update!) draw-adt)
+              ;;  ((level-adt 'draw!) draw-adt)
+              (set! time 0)))))
 
     (define (start)
-      ((level-adt 'draw!) draw-adt))
+      ((draw-adt 'set-game-loop-procedure!) game-loop-procedure)
+      ((draw-adt 'set-key-procedure!) key-procedure))
 
     (define dispatch
       (lambda (message)
