@@ -73,8 +73,8 @@
             ((number? primitive) (number->string primitive))
             ((boolean? primitive) (boolean->string primitive))
             (else "ERROR: Primitive not handled in conditional")))
-        (define (string->char string)
-          (string-ref string 0))
+        (define (string->char->string str)
+          (string (string-ref str 0)))
         (define (line->string i)
           (string-append
            "| "
@@ -84,7 +84,7 @@
                    (if (primitive? peek-value)
                        (string-append (string-append (primitive->string peek-value) " ")
                                       (loop (+ j 1)))
-                       (string-append (string-append (string->char (peek-value 'to-string)) " ")
+                       (string-append (string-append (string->char->string (peek-value 'to-string)) " ")
                                       (loop (+ j 1)))))
                  "|\n"))))
         (string-append bound->string
@@ -101,6 +101,6 @@
           ((eq? message 'write-grid!) write-grid!)
           ((eq? message 'for-each-grid) for-each-grid)
           ((eq? message 'map-grid) map-grid)
-          ((eq? message 'to-string) (to-string))
+          ((eq? message 'to-string) to-string)
           (else "ERROR: Method not recognized by GRID ADT"))))
     grid-dispatch))

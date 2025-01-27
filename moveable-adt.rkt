@@ -49,6 +49,6 @@
           ((eq? message 'get-type) type)
           ((eq? message 'draw!) draw!)
           ((eq? message 'set-draw!) set-draw!)
-          ((eq? message'get-draw) draw)
+          ((eq? message 'get-draw) draw)
           (else (position message)))))
     moveable-dispatch))

@@ -14,25 +14,24 @@
 
 
     (define (key-procedure status key)
-      (begin
-        (if (eq? 'pressed status)
-            (begin
-              ((pacman 'set-direction!) key)
-              (if able-to-move
-                  (begin
-                    ((pacman 'move!))
-                    (set! able-to-move #f)))))))
+      (if (eq? 'pressed status)
+          (case key
+            ((up down left right)
+             ((pacman 'set-direction!) key)
+             ((pacman 'move!))
+             (set! able-to-move #f))
+            (else (display "Unkown key: ")(display key)(newline)))))
 
     (define (game-loop-procedure delta-time)
       (begin
         (set! time (+ time delta-time))
         (if (> time game-speed)
             (begin
-              ((pacman 'draw!) draw-adt)
-              ;;   ((level-adt 'update!) draw-adt)
-              ;;  ((level-adt 'draw!) draw-adt)
-              (set! time 0)
               (set! able-to-move #t)
+              ;;((level-adt 'update!) draw-adt)
+              ;;((level-adt 'draw!) draw-adt)
+              ((pacman 'draw!) draw-adt)
+              (set! time 0)
               ))))
 
     (define (start)
