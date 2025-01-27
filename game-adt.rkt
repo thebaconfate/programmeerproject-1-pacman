@@ -8,6 +8,7 @@
          (pacman (make-pacman-adt 5 5))
          (level-adt (make-level-adt true-game-width true-game-height level))
          (draw-adt (make-draw-adt window-width-px window-height-px))
+         (able-to-move #f)
          (time 0))
 
     (define (key-procedure status key)
@@ -15,13 +16,17 @@
         (if (eq? 'pressed status)
             (begin
               ((pacman 'set-direction!) key)
-              ((pacman 'move!))))))
+              (if able-to-move
+                  (begin
+                    ((pacman 'move!))
+                    (set! able-to-move #f)))))))
 
     (define (game-loop-procedure delta-time)
       (begin
         (set! time (+ time delta-time))
         (if (> time 200)
             (begin
+              (set! able-to-move #t)
               ((pacman 'draw!) draw-adt)
               ;;   ((level-adt 'update!) draw-adt)
               ;;  ((level-adt 'draw!) draw-adt)
