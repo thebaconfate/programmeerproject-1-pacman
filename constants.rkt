@@ -25,6 +25,7 @@
 (define coin-score-value 10)
 
 (define coins-positions-per-level '((1 . ((1 . 1)
-                                          (2 . 2)))
+                                          (2 . 2)
+                                          (3 . 3)))
                                     (2 . ((1 . 1)))))
 

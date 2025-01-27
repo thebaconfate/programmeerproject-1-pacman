@@ -25,7 +25,7 @@
 
     (define coin-tiles (lambda ()(vector-ref tiles 1)))
     (define set-coin-tiles! (lambda (adt-and-sequence)(vector-set! tiles 1 adt-and-sequence)))
-    (define coin-sprites '(("images/coin.png" . "images/coin-mask.png")))
+    (define coin-sprites '(("images/coin.png" . "images/coin_mask.png")))
 
     (define ghost-tiles (lambda () (vector-ref tiles 2)))
     (define fruit-tiles (lambda () (vector-ref tiles 3)))

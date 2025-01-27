@@ -20,18 +20,17 @@
                            (edible (make-edible-adt x y coin-type coin-score-value)))
                       ((grid 'write-grid!) x y edible)))
                   coin-positions)
-        (set! redraw-positions (cons coin-positions redraw-positions))))
+        (set! redraw-positions (append coin-positions redraw-positions))))
 
     (define (draw! draw-adt)
       (if (not (null? redraw-positions))
           (begin
             (for-each (lambda (position)
-                        (let* ((x (caar position))
-                               (y (cdar position)))
+                        (let* ((x (car position))
+                               (y (cdr position)))
                           ((((grid 'read-grid) x y) 'draw!) draw-adt)))
                       redraw-positions)
-            ;;(set! redraw-positions '())
-            )))
+            (set! redraw-positions '()))))
 
     (init-level)
     (define level-dispatch
