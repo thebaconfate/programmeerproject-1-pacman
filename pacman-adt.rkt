@@ -25,7 +25,8 @@
     (define (reset-rotation!) (set! rotations '(0 . #f)))
 
     (define (draw! draw-adt)
-      ((draw-adt 'draw-pacman!) pacman-dispatch))
+      ((draw-adt 'draw-pacman!) pacman-dispatch)
+      ((pacman-dispatch 'set-draw!)#f))
 
     (define pacman-dispatch
       (lambda (message)

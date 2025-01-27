@@ -100,8 +100,10 @@
              (rotations (adt 'get-rotation)))
         (if (cdr rotations)
             (rotate-tile adt (car rotations) tile-sequence (cdr rotations)))
-        (draw-object! adt tile-sequence)
-        (tile-sequence 'set-next!)))
+        (if (adt 'get-draw)
+            (begin
+              (draw-object! adt tile-sequence)
+              (tile-sequence 'set-next!)))))
 
     (define (set-key-procedure! proc)
       ((window 'set-key-callback!) proc))

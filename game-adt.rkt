@@ -9,7 +9,9 @@
          (level-adt (make-level-adt true-game-width true-game-height level))
          (draw-adt (make-draw-adt window-width-px window-height-px))
          (able-to-move #f)
-         (time 0))
+         (time 0)
+         (game-speed 50))
+
 
     (define (key-procedure status key)
       (begin
@@ -24,13 +26,14 @@
     (define (game-loop-procedure delta-time)
       (begin
         (set! time (+ time delta-time))
-        (if (> time 200)
+        (if (> time game-speed)
             (begin
-              (set! able-to-move #t)
               ((pacman 'draw!) draw-adt)
               ;;   ((level-adt 'update!) draw-adt)
               ;;  ((level-adt 'draw!) draw-adt)
-              (set! time 0)))))
+              (set! time 0)
+              (set! able-to-move #t)
+              ))))
 
     (define (start)
       ((draw-adt 'set-game-loop-procedure!) game-loop-procedure)
