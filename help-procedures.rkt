@@ -2,12 +2,16 @@
 
 (#%provide (all-defined))
 
-(define (pacman? adt)
-  (equal? 'pacman (adt 'type)))
+(define (list-length>1? lst)
+  (not (null? (cdr lst))))
 
-(define (ghost? adt)
-  (equal? 'ghost (adt 'type)))
+(define (list-length=1? lst)
+  (null? (cdr lst)))
 
-(define (fruit? adt)
-  (equal? 'fruit (adt 'type)))
+(define (display-invalid-message message adt)
+  (begin (display "Message: ")
+         (display message)
+         (display " not understood by ")
+         (display adt)
+         (newline)))
 

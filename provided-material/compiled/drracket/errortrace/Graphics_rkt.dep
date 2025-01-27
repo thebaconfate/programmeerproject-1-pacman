@@ -1,0 +1,1 @@
+("8.14" ta6nt ("0ceb630d2acf9d42db852bcc1c4199fc582a301d" . "1a3d63aba9a3a67cd028b0761298385eb4d80a8f") (collects #"compatibility" #"mlist.rkt") (collects #"drracket" #"private" #"drracket-errortrace-key.rkt") (collects #"racket" #"gui" #"base.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"racket" #"string.rkt"))

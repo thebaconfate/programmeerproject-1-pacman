@@ -1,41 +1,53 @@
 #lang r5rs
 
-(#%require "position-adt.rkt")
+(#%require "help-procedures.rkt" "position-adt.rkt")
 (#%provide make-moveable-adt)
 
-(define (make-moveable-adt x y)
+(define (make-moveable-adt x y type)
   (let ((position (make-position-adt x y))
-        (direction 'up))
+        (direction 'up)
+        (draw #t))
 
     (define (set-x! new-x)
-      (set! position (make-position-adt new-x (position 'get-y))))
+      (begin
+        (set! position (make-position-adt new-x (position 'get-y)))
+        (set! draw #t)))
 
     (define (set-y! new-y)
-      (set! position (make-position-adt (position 'get-x) new-y)))
+      (begin
+        (set! position (make-position-adt (position 'get-x) new-y))
+        (set! draw #t)))
 
-    (define moveable? #t)
-
-    (define (get-direction) direction)
-    
     (define (set-direction! new-direction)
-      (set! direction new-direction))
+      (case new-direction
+        (('up 'down 'right 'left)(set! direction new-direction))
+        (else (display-invalid-message new-direction "MOVEABLE_ADT -> Invalid direction"))))
 
     (define (reset-position!)
       (set! position (make-position-adt x y)))
-      
+
     (define (move!)
-      (cond
-        ((eq? 'up direction)(set-y! (+ (position 'get-y) 1)))
-        ((eq? 'right direction)(set-x! (+ (position 'get-x) 1)))
-        ((eq? 'left direction)(set-x! (- (position 'get-x) 1)))
-        ((eq? 'down direction)(set-y! (- (position 'get-y) 1)))))
+      (case direction
+        (('up)(set-y! (+ (position 'get-y) 1)))
+        (('right)(set-x! (+ (position 'get-x) 1)))
+        (('left)(set-x! (- (position 'get-x) 1)))
+        (('down)(set-y! (- (position 'get-y)1)))))
+
+    (define (draw! draw-adt)
+      (if draw
+          (begin
+            ((draw-adt 'draw!) moveable-dispatch)
+            (set! draw #f))))
 
     (define moveable-dispatch
       (lambda (message)
         (cond
-          ((eq? message 'get-direction)(get-direction))
-          ((eq? message 'set-direction!)set-direction!)
-          ((eq? message 'reset-position!)(reset-position!))
-          ((eq? message 'move!)(move!))
+          ((eq? message 'get-direction) direction)
+          ((eq? message 'set-direction!) set-direction!)
+          ((eq? message 'reset-position!) reset-position!)
+          ((eq? message 'move!) move!)
+          ((eq? message 'get-type) type)
+          ((eq? message 'draw) draw)
+          ((eq? message 'draw!) draw!)
           (else (position message)))))
     moveable-dispatch))
