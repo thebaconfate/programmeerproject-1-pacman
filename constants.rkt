@@ -25,7 +25,7 @@
 (define coin-score-value 10)
 
 (define (create-line-of-positions starting-position end-position)
-  (define (create-line create-position f starting-position)
+  (define (create-line create-position f)
     (begin
       (if (> (f starting-position)(f end-position))
           (let ((tmp end-position))
@@ -39,8 +39,8 @@
   (let ((x1 (car starting-position))
         (x2 (car end-position)))
     (if (= x1 x2)
-        (create-line (lambda (y) (cons x1 y)) cdr starting-position)
-        (create-line (lambda (x) (cons x (cdr end-position))) car end-position))))
+        (create-line (lambda (y) (cons x1 y)) cdr)
+        (create-line (lambda (x) (cons x (cdr end-position))) car))))
 
 (define (list-find ==? lst)
   (cond
@@ -77,15 +77,27 @@
           lsts))
 
 (define (create-square-of-positions x1 x2 y1 y2)
-  (let  ((res1 (create-line-of-positions (cons x1 y1)(cons x1 y2)))
-         (res2 (create-line-of-positions (cons x2 y1)(cons x2 y2)))
-         (res3 (create-line-of-positions (cons x1 y1)(cons x2 y1)))
-         (res4 (create-line-of-positions (cons x1 y2)(cons x2 y2))))
+  (let*  ((upper-left (cons x1 y1))
+          (upper-right (cons x2 y1))
+          (lower-left (cons x1 y2))
+          (lower-right (cons x2 y2))
+          (res1 (create-line-of-positions upper-left lower-left))
+          (res2 (create-line-of-positions upper-right lower-right))
+          (res3 (create-line-of-positions upper-left upper-right))
+          (res4 (create-line-of-positions lower-left lower-right)))
+    (display res1)
+    (newline)
+    (display res2)
+    (newline)
+    (display res3)
+    (newline)
+    (display res4)
+    (newline)
     (append-uniques (lambda (position1 position2)
                       (and (= (car position1)(car position2))
                            (= (cdr position1)(cdr position2))))
                     res1 res2 res3 res4)))
 
-(define coins-positions-per-level (list (cons 1 (create-square-of-positions 7 22 8 15))))
+(define coins-positions-per-level (list (cons 1 (create-square-of-positions 7 22 8 23))))
 (display coins-positions-per-level)
 

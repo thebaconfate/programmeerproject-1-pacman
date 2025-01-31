@@ -93,10 +93,7 @@
              (sprites (cdr adt-drawables))
              (tile-sequence (get-object adt tiles-storage sprites)))
         (draw-object! adt tile-sequence)
-        (display "object drawn ")
-        (display (adt 'get-type))
-        (newline)
-        ;;(tile-sequence 'set-next!)
+        (tile-sequence 'set-next!)
         ))
 
 
