@@ -18,10 +18,10 @@
 
     (define pacman-tiles (lambda () (vector-ref tiles 0)))
     (define set-pacman-tiles! (lambda (adt-and-sequence) (vector-set! tiles 0 adt-and-sequence)))
-    (define pacman-sprites '(("images/pacman-3.png" . "images/pacman-3_mask.png")
-                             ("images/pacman-2.png" . "images/pacman-2_mask.png")
+    (define pacman-sprites '(("images/pacman-2.png" . "images/pacman-2_mask.png")
                              ("images/pacman-1.png" . "images/pacman-1_mask.png")
-                             ("images/pacman-2.png" . "images/pacman-2_mask.png")))
+                             ("images/pacman-2.png" . "images/pacman-2_mask.png")
+                             ("images/pacman-3.png" . "images/pacman-3_mask.png")))
 
     (define coin-tiles (lambda ()(vector-ref tiles 1)))
     (define set-coin-tiles! (lambda (adt-and-sequence)(vector-set! tiles 1 adt-and-sequence)))

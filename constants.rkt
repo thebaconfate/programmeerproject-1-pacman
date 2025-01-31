@@ -76,6 +76,10 @@
           '()
           lsts))
 
+(define (same-position? position1 position2)
+  (and (= (car position1)(car position2))
+       (= (cdr position1)(cdr position2))))
+
 (define (create-square-of-positions x1 x2 y1 y2)
   (let*  ((upper-left (cons x1 y1))
           (upper-right (cons x2 y1))
@@ -98,6 +102,15 @@
                            (= (cdr position1)(cdr position2))))
                     res1 res2 res3 res4)))
 
-(define coins-positions-per-level (list (cons 1 (create-square-of-positions 7 22 8 23))))
-(display coins-positions-per-level)
+(define pacman-starting-position (cons 15 23))
+(define coins-positions-per-level (list
+                                   (cons 1
+                                         (append-uniques
+                                          same-position?
+                                          (create-line-of-positions (cons 7 8)(cons 22 8))
+                                          (create-line-of-positions (cons 7 8)(cons 7 23))
+                                          (create-line-of-positions (cons 22 8)(cons 22 23))
+                                          (create-line-of-positions (cons 7 23)(cons 14 23))
+                                          (create-line-of-positions (cons 16 23)(cons 22 23))
+                                          ))))
 

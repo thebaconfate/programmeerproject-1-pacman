@@ -5,7 +5,7 @@
 
 (define (make-game-adt)
   (let* ((level 1)
-         (pacman (make-pacman-adt 5 5))
+         (pacman (make-pacman-adt (car pacman-starting-position)(cdr pacman-starting-position)))
          (level-adt (make-level-adt true-game-width true-game-height level))
          (draw-adt (make-draw-adt window-width-px window-height-px))
          (able-to-move #f)
